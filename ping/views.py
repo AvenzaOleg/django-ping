@@ -36,4 +36,4 @@ def status(request):
         response = json.dumps(response_dict, sort_keys=True)
         mimetype = 'application/json'
 
-    return HttpResponse(response, mimetype=mimetype, status=200)
+    return HttpResponse(response, content_type=mimetype, status=200)
