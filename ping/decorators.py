@@ -32,14 +32,18 @@ def http_basic_auth(func):
                     auth = auth.strip().decode('base64')
                     username, password = auth.split(':', 1)
 
-                    print (username, password), settings.PING_BASIC_AUTH
-
                     if (username, password) == settings.PING_BASIC_AUTH:
                         return func(request, *args, **kwargs)
                     else:
-                        return HttpResponse("Invalid Credentials", status=401)
+                        response = HttpResponse("Invalid Credentials")
+                        response.status_code = 403
+                        return response
+
             else:
-                return HttpResponse("No Credentials Provided", status=401)
+                response = HttpResponse("Invalid Credentials")
+                response.status_code = 401
+                response['WWW-Authenticate'] = 'Basic realm=""Invalid Credentials""'
+                return response
         else:
             return func(request, *args, **kwargs)
 
