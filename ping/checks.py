@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
 from ping.defaults import *
+from collections import OrderedDict
 
 def checks(request):
     """
@@ -11,7 +12,8 @@ def checks(request):
     then returns a key name for the check and the value
     for that check.
     """
-    response_dict = {}
+    # We want to preserve the order
+    response_dict = OrderedDict()
 
     #Taken straight from Django
     #If there is a better way, I don't know it
