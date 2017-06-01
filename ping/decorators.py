@@ -32,6 +32,8 @@ def http_basic_auth(func):
                     auth = auth.strip().decode('base64')
                     username, password = auth.split(':', 1)
 
+                    print (username, password), settings.PING_BASIC_AUTH
+
                     if (username, password) == settings.PING_BASIC_AUTH:
                         return func(request, *args, **kwargs)
                     else:
