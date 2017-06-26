@@ -26,6 +26,10 @@ def http_basic_auth(func):
     @wraps(func)
     def _decorator(request, *args, **kwargs):
         if getattr(settings, 'PING_BASIC_AUTH', PING_BASIC_AUTH):
+            if 'username' in request.GET and 'password' in request.GET:
+                if (request.GET['username'], request.GET['password']) == settings.PING_BASIC_AUTH:
+                    return func(request, *args, **kwargs)
+
             if request.META.has_key('HTTP_AUTHORIZATION'):
                 authmeth, auth = request.META['HTTP_AUTHORIZATION'].split(' ', 1)
                 if authmeth.lower() == 'basic':
