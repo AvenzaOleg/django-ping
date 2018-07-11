@@ -30,7 +30,7 @@ def http_basic_auth(func):
                 if (request.GET['username'], request.GET['password']) == settings.PING_BASIC_AUTH:
                     return func(request, *args, **kwargs)
 
-            if request.META.has_key('HTTP_AUTHORIZATION'):
+            if 'HTTP_AUTHORIZATION' in request.META:
                 authmeth, auth = request.META['HTTP_AUTHORIZATION'].split(' ', 1)
                 if authmeth.lower() == 'basic':
                     auth = auth.strip().decode('base64')
