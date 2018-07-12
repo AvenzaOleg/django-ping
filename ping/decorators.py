@@ -33,10 +33,15 @@ def http_basic_auth(func):
             if 'HTTP_AUTHORIZATION' in request.META:
                 authmeth, auth = request.META['HTTP_AUTHORIZATION'].split(' ', 1)
                 if authmeth.lower() == 'basic':
-                    auth = auth.strip().decode('base64')
+                    # strip whitespace
+                    auth = auth.strip()
+                    
+                    # Decode base64: String -> Binary -> Base64Decode -> Binary -> String
+                    auth = base64.standard_b64decode(auth.encode('ascii')).decode('utf-8')
+                    
                     username, password = auth.split(':', 1)
 
-                    if (username, password) == settings.PING_BASIC_AUTH:
+                    if (username, password) == tuple(settings.PING_BASIC_AUTH):
                         return func(request, *args, **kwargs)
                     else:
                         response = HttpResponse("Invalid Credentials")
